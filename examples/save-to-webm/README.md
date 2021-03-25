@@ -9,4 +9,7 @@ Run `go run examples/save-to-webm/server/main.go -c examples/save-to-webm/server
 ### Start avp client
 Run `go run examples/save-to-webm/client/main.go $SESSION_ID`. This will initiate a webrtc transport from avp to sfu for the given session. Tracks will start being relayed. When prompted, enter a track id to create a `WebmSaver` element which will start writing the track data to disk.
 
+### Play stream 
+Run `ffplay -i sdp.sdp -protocol_whitelist file,udp,rtp` to play your streams
+
 Congrats, you are now processing media with the ion-avp! Now start building something cool!

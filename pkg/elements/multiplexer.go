@@ -1,8 +1,8 @@
 package elements
 
 import (
+	avp "github.com/fenestron/ion-avp/pkg"
 	"github.com/lucsky/cuid"
-	avp "github.com/pion/ion-avp/pkg"
 )
 
 type Multiplexer struct {

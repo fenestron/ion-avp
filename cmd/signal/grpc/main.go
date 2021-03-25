@@ -6,9 +6,9 @@ import (
 	"net"
 	"os"
 
-	pb "github.com/pion/ion-avp/cmd/signal/grpc/proto"
-	"github.com/pion/ion-avp/cmd/signal/grpc/server"
-	avp "github.com/pion/ion-avp/pkg"
+	pb "github.com/fenestron/ion-avp/cmd/signal/grpc/proto"
+	"github.com/fenestron/ion-avp/cmd/signal/grpc/server"
+	avp "github.com/fenestron/ion-avp/pkg"
 	log "github.com/pion/ion-log"
 	"github.com/spf13/viper"
 	"google.golang.org/grpc"

@@ -1,4 +1,4 @@
-module github.com/pion/ion-avp
+module github.com/fenestron/ion-avp
 
 go 1.15
 

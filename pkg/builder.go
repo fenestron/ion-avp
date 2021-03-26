@@ -2,7 +2,9 @@ package avp
 
 import (
 	"errors"
+	"fmt"
 	"io"
+	"net"
 	"sync"
 
 	log "github.com/pion/ion-log"
@@ -20,6 +22,12 @@ var (
 	// ErrCodecNotSupported is returned when a rtp packed it pushed with an unsupported codec
 	ErrCodecNotSupported = errors.New("codec not supported")
 )
+
+type udpConn struct {
+	conn        *net.UDPConn
+	port        int
+	payloadType uint8
+}
 
 // Builder Module for building video/audio samples from rtp streams
 type Builder struct {
@@ -88,6 +96,45 @@ func (b *Builder) OnStop(f func()) {
 
 func (b *Builder) build() {
 	log.Debugf("Reading rtp for track: %s", b.Track().ID())
+
+	// Create a local addr
+	var laddr *net.UDPAddr
+	var err error
+	if laddr, err = net.ResolveUDPAddr("udp", "127.0.0.1:"); err != nil {
+		panic(err)
+	}
+
+	// Prepare udp conns
+	// Also update incoming packets with expected PayloadType, the browser may use
+	// a different value. We have to modify so our stream matches what rtp-forwarder.sdp expects
+	udpConns := map[string]*udpConn{
+		"audio": {port: 4000, payloadType: 111},
+		"video": {port: 4002, payloadType: 96},
+	}
+	for _, c := range udpConns {
+		// Create remote addr
+		var raddr *net.UDPAddr
+		if raddr, err = net.ResolveUDPAddr("udp", fmt.Sprintf("127.0.0.1:%d", c.port)); err != nil {
+			panic(err)
+		}
+
+		// Dial udp
+		if c.conn, err = net.DialUDP("udp", laddr, raddr); err != nil {
+			panic(err)
+		}
+		defer func(conn net.PacketConn) {
+			if closeErr := conn.Close(); closeErr != nil {
+				panic(closeErr)
+			}
+		}(c.conn)
+	}
+
+	// Retrieve udp connection
+	c, ok := udpConns[b.track.Kind().String()]
+	if !ok {
+		return
+	}
+
 	for {
 		if b.stopped.get() {
 			return
@@ -103,30 +150,37 @@ func (b *Builder) build() {
 			continue
 		}
 
-		b.builder.Push(pkt)
-
-		for {
-			log.Tracef("Read sample from builder: %s", b.Track().ID())
-			sample, timestamp := b.builder.PopWithTimestamp()
-			log.Tracef("Got sample from builder: %s sample: %v", b.Track().ID(), sample)
-
-			if b.stopped.get() {
-				return
+		if _, err = c.conn.Write(pkt.Raw); err != nil {
+			if opError, ok := err.(*net.OpError); ok && opError.Err.Error() == "write: connection refused" {
+				continue
 			}
-
-			if sample == nil {
-				break
-			}
-
-			b.out <- &Sample{
-				ID:             b.track.ID(),
-				Type:           int(b.track.Codec().Type),
-				SequenceNumber: b.sequence,
-				Timestamp:      timestamp,
-				Payload:        sample.Data,
-			}
-			b.sequence++
+			panic(err)
 		}
+
+		//b.builder.Push(pkt)
+		//
+		//for {
+		//	log.Tracef("Read sample from builder: %s", b.Track().ID())
+		//	sample, timestamp := b.builder.PopWithTimestamp()
+		//	log.Tracef("Got sample from builder: %s sample: %v", b.Track().ID(), sample)
+		//
+		//	if b.stopped.get() {
+		//		return
+		//	}
+		//
+		//	if sample == nil {
+		//		break
+		//	}
+		//
+		//	b.out <- &Sample{
+		//		ID:             b.track.ID(),
+		//		Type:           int(b.track.Codec().Type),
+		//		SequenceNumber: b.sequence,
+		//		Timestamp:      timestamp,
+		//		Payload:        sample.Data,
+		//	}
+		//	b.sequence++
+		//}
 	}
 }
 

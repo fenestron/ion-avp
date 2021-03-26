@@ -134,7 +134,7 @@ func (b *Builder) build() {
 		return
 	}
 
-	buf := make([]byte, 4096)
+	buf := make([]byte, 200000)
 	rtpPacket := &rtp.Packet{}
 
 	for {

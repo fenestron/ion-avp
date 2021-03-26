@@ -3,7 +3,6 @@ package avp
 import (
 	"errors"
 	"fmt"
-	"io"
 	"net"
 	"sync"
 
@@ -135,27 +134,61 @@ func (b *Builder) build() {
 		return
 	}
 
+	buf := make([]byte, 1500)
+	rtpPacket := &rtp.Packet{}
+
 	for {
 		if b.stopped.get() {
 			return
 		}
 
-		pkt, err := b.track.ReadRTP()
-		if err != nil {
-			if err == io.EOF {
-				b.stop()
-				return
-			}
-			log.Errorf("Error reading track rtp %s", err)
-			continue
+		n, readErr := b.track.Read(buf)
+		if readErr != nil {
+			panic(readErr)
 		}
 
-		if _, err = c.conn.Write(pkt.Raw); err != nil {
+		// Unmarshal the packet and update the PayloadType
+		if err = rtpPacket.Unmarshal(buf[:n]); err != nil {
+			panic(err)
+		}
+		rtpPacket.PayloadType = c.payloadType
+
+		// Marshal into original buffer with updated PayloadType
+		if n, err = rtpPacket.MarshalTo(buf); err != nil {
+			panic(err)
+		}
+
+		// Write
+		if _, err = c.conn.Write(buf[:n]); err != nil {
+			// For this particular example, third party applications usually timeout after a short
+			// amount of time during which the user doesn't have enough time to provide the answer
+			// to the browser.
+			// That's why, for this particular example, the user first needs to provide the answer
+			// to the browser then open the third party application. Therefore we must not kill
+			// the forward on "connection refused" errors
 			if opError, ok := err.(*net.OpError); ok && opError.Err.Error() == "write: connection refused" {
 				continue
 			}
 			panic(err)
 		}
+
+
+		//pkt, err := b.track.ReadRTP()
+		//if err != nil {
+		//	if err == io.EOF {
+		//		b.stop()
+		//		return
+		//	}
+		//	log.Errorf("Error reading track rtp %s", err)
+		//	continue
+		//}
+		//
+		//if _, err = c.conn.Write(pkt.Raw); err != nil {
+		//	if opError, ok := err.(*net.OpError); ok && opError.Err.Error() == "write: connection refused" {
+		//		continue
+		//	}
+		//	panic(err)
+		//}
 
 		//b.builder.Push(pkt)
 		//

@@ -7,7 +7,7 @@ import (
 	"github.com/at-wat/ebml-go/mkvcore"
 	"github.com/at-wat/ebml-go/webm"
 
-	avp "github.com/pion/ion-avp/pkg"
+	avp "github.com/fenestron/ion-avp/pkg"
 	log "github.com/pion/ion-log"
 )
 

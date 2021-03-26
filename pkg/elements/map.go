@@ -1,7 +1,7 @@
 package elements
 
 import (
-	avp "github.com/pion/ion-avp/pkg"
+	avp "github.com/fenestron/ion-avp/pkg"
 )
 
 // Map instance

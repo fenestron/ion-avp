@@ -4,7 +4,7 @@ import (
 	"context"
 	"sync"
 
-	avp "github.com/pion/ion-avp/pkg"
+	avp "github.com/fenestron/ion-avp/pkg"
 )
 
 // AVP represents an avp instance

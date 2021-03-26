@@ -6,10 +6,10 @@
 <h4 align="center">Go implementation of an Audio/Visual Processing Service</h4>
 <p align="center">
   <a href="http://gophers.slack.com/messages/pion"><img src="https://img.shields.io/badge/join-us%20on%20slack-gray.svg?longCache=true&logo=slack&colorB=brightgreen" alt="Slack Widget"></a>
-  <a href="https://travis-ci.org/pion/ion-avp"><img src="https://travis-ci.org/pion/ion-avp.svg?branch=master" alt="Build Status"></a>
-  <a href="https://pkg.go.dev/github.com/pion/ion-avp"><img src="https://godoc.org/github.com/pion/ion-avp?status.svg" alt="GoDoc"></a>
-  <a href="https://codecov.io/gh/pion/ion-avp"><img src="https://codecov.io/gh/pion/ion-avp/branch/master/graph/badge.svg" alt="Coverage Status"></a>
-  <a href="https://goreportcard.com/report/github.com/pion/ion-avp"><img src="https://goreportcard.com/badge/github.com/pion/ion-avp" alt="Go Report Card"></a>
+  <a href="https://travis-ci.org/fenestron/ion-avp"><img src="https://travis-ci.org/fenestron/ion-avp.svg?branch=master" alt="Build Status"></a>
+  <a href="https://pkg.go.dev/github.com/fenestron/ion-avp"><img src="https://godoc.org/github.com/fenestron/ion-avp?status.svg" alt="GoDoc"></a>
+  <a href="https://codecov.io/gh/fenestron/ion-avp"><img src="https://codecov.io/gh/fenestron/ion-avp/branch/master/graph/badge.svg" alt="Coverage Status"></a>
+  <a href="https://goreportcard.com/report/github.com/fenestron/ion-avp"><img src="https://goreportcard.com/badge/github.com/fenestron/ion-avp" alt="Go Report Card"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT"></a>
 </p>
 <br>

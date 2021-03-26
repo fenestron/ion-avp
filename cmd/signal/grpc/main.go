@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"os"
 
-	grpc "github.com/pion/ion-avp/cmd/signal/grpc/server"
-	avp "github.com/pion/ion-avp/pkg"
+	grpc "github.com/fenestron/ion-avp/cmd/signal/grpc/server"
+	avp "github.com/fenestron/ion-avp/pkg"
 	log "github.com/pion/ion-log"
 	"github.com/spf13/viper"
 )

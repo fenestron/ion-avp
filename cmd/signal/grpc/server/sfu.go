@@ -6,7 +6,7 @@ import (
 	"io"
 	"sync"
 
-	avp "github.com/pion/ion-avp/pkg"
+	avp "github.com/fenestron/ion-avp/pkg"
 	log "github.com/pion/ion-log"
 	sfu "github.com/pion/ion-sfu/cmd/signal/grpc/proto"
 	"github.com/pion/webrtc/v3"

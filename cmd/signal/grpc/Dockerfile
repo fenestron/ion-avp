@@ -9,15 +9,15 @@ RUN dpkg -i deb-multimedia-keyring_2016.8.1_all.deb
 RUN apt-get update && apt-get install -y \
     libvpx-dev
 
-WORKDIR $GOPATH/src/github.com/pion/ion-avp
+WORKDIR $GOPATH/src/github.com/fenestron/ion-avp
 
 COPY go.mod go.sum ./
-RUN cd $GOPATH/src/github.com/pion/ion-avp && go mod download
+RUN cd $GOPATH/src/github.com/fenestron/ion-avp && go mod download
 
-COPY pkg/ $GOPATH/src/github.com/pion/ion-avp/pkg
-COPY cmd/ $GOPATH/src/github.com/pion/ion-avp/cmd
+COPY pkg/ $GOPATH/src/github.com/fenestron/ion-avp/pkg
+COPY cmd/ $GOPATH/src/github.com/fenestron/ion-avp/cmd
 
-WORKDIR $GOPATH/src/github.com/pion/ion-avp/cmd/signal/grpc
+WORKDIR $GOPATH/src/github.com/fenestron/ion-avp/cmd/signal/grpc
 RUN GOOS=linux go build -ldflags '-linkmode "external" -extldflags "-static"' -tags libvpx -a -installsuffix cgo -o /avp .
 
 FROM alpine:3.12.1

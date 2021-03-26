@@ -8,7 +8,7 @@ import (
 	"os"
 	"strings"
 
-	pb "github.com/pion/ion-avp/cmd/signal/grpc/proto"
+	pb "github.com/fenestron/ion-avp/cmd/signal/grpc/proto"
 	log "github.com/pion/ion-log"
 	"google.golang.org/grpc"
 )

@@ -150,6 +150,8 @@ func (b *Builder) build() {
 			continue
 		}
 
+		log.Infof("KEKUS")
+
 		if _, err = c.conn.Write(pkt.Raw); err != nil {
 			if opError, ok := err.(*net.OpError); ok && opError.Err.Error() == "write: connection refused" {
 				continue
